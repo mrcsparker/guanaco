@@ -1,6 +1,6 @@
 use magnus::{define_module, function, prelude::*, Error};
 
-pub mod auto_model;
+pub mod camel;
 
 fn get_accelerator() -> String {
     match llm_base::ggml::accelerator::get_accelerator() {
@@ -16,7 +16,7 @@ fn init() -> Result<(), Error> {
     let namespace = define_module("Guanaco")?;
     namespace.define_singleton_method("get_accelerator", function!(get_accelerator, 0))?;
 
-    auto_model::setup(namespace)?;
+    camel::setup(namespace)?;
 
     Ok(())
 }

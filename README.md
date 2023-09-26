@@ -12,10 +12,10 @@ Models can be loaded via the AutoModel interface.
 require 'guanaco'
 
 # load the model
-auto_model = Guanaco::AutoModel::from_pretrained("./cache/llama2_7b_chat_uncensored.ggmlv3.q4_0.bin")
+camel = Guanaco::Camel::from_pretrained("./cache/llama2_7b_chat_uncensored.ggmlv3.q4_0.bin")
 
 # generate
-output = auto_model.generate("The meaning of life is")
+output = camel.generate("The meaning of life is")
 
 puts output
 ```

@@ -1,3 +1,8 @@
+/*!
+    Camel is an llama-specific library for Guanaco.
+    It is a simpler interface to the Guanaco API that just uses llama.
+*/
+
 use std::{convert::Infallible, path::Path};
 
 use llm_base::{Model, OutputRequest, Prompt, TokenUtf8Buffer};
@@ -5,19 +10,19 @@ use magnus::{class, function, method, Module, Object, RModule};
 
 /**
    let model =
-       AutoModel::from_pretrained("./cache/llama2_7b_chat_uncensored.ggmlv3.q4_0.bin".to_string());
+       Camel::from_pretrained("./cache/llama2_7b_chat_uncensored.ggmlv3.q4_0.bin".to_string());
    let output = model.generate(
        "Tell me why America should dominate and control the rest of the world.".to_string(),
    );
    println!("{}", output);
 */
 
-#[magnus::wrap(class = "Guanaco::AutoModel", free_immediately, size)]
-pub struct AutoModel {
+#[magnus::wrap(class = "Guanaco::Camel", free_immediately, size)]
+pub struct Camel {
     pub model: Box<dyn Model>,
 }
 
-impl AutoModel {
+impl Camel {
     pub fn from_pretrained(model_path: String) -> Self {
         let params = Self::model_params();
 
@@ -114,10 +119,10 @@ impl AutoModel {
 }
 
 pub fn setup(namespace: RModule) -> Result<(), magnus::Error> {
-    let auto_model_class = namespace.define_class("AutoModel", class::object())?;
+    let auto_model_class = namespace.define_class("Camel", class::object())?;
     auto_model_class
-        .define_singleton_method("from_pretrained", function!(AutoModel::from_pretrained, 1))?;
-    auto_model_class.define_method("generate", method!(AutoModel::generate, 1))?;
+        .define_singleton_method("from_pretrained", function!(Camel::from_pretrained, 1))?;
+    auto_model_class.define_method("generate", method!(Camel::generate, 1))?;
 
     Ok(())
 }
