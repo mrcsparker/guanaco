@@ -1,12 +1,22 @@
 use magnus::{define_module, function, prelude::*, Error};
 
-fn hello(subject: String) -> String {
-    format!("Hello from Rust, {}!", subject)
+pub mod auto_model;
+
+fn get_accelerator() -> String {
+    match llm_base::ggml::accelerator::get_accelerator() {
+        llm_base::ggml::accelerator::Accelerator::CuBLAS => "cuda".to_owned(),
+        llm_base::ggml::accelerator::Accelerator::CLBlast => "opencl".to_owned(),
+        llm_base::ggml::accelerator::Accelerator::Metal => "metal".to_owned(),
+        _ => "cpu".to_owned(),
+    }
 }
 
 #[magnus::init]
 fn init() -> Result<(), Error> {
-    let module = define_module("Guanaco")?;
-    module.define_singleton_method("hello", function!(hello, 1))?;
+    let namespace = define_module("Guanaco")?;
+    namespace.define_singleton_method("get_accelerator", function!(get_accelerator, 0))?;
+
+    auto_model::setup(namespace)?;
+
     Ok(())
 }
