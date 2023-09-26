@@ -18,7 +18,21 @@ If bundler is not being used to manage dependencies, install the gem by executin
 
 ## Usage
 
-TODO: Write usage instructions here
+### Running local GGML models
+
+Models can be loaded via the AutoModel interface.
+
+```ruby
+require 'guanaco'
+
+# load the model
+auto_model = Guanaco::AutoModel::from_pretrained("./cache/llama2_7b_chat_uncensored.ggmlv3.q4_0.bin")
+
+# generate
+output = auto_model.generate("The meaning of life is")
+
+puts output
+```
 
 ## Development
 

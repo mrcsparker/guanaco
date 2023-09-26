@@ -53,9 +53,9 @@ impl AutoModel {
     }
 
     pub fn generate(&self, prompt: String) -> String {
-        let mut session = self.model.start_session(Default::default());
+        let mut session = self.model.start_session(self.inference_session_config());
 
-        let inference_parameters = llm::InferenceParameters::default();
+        let inference_parameters = self.inference_params();
 
         session
             .feed_prompt(
@@ -91,6 +91,25 @@ impl AutoModel {
         }
 
         output_tokens.join("")
+    }
+
+    fn inference_params(&self) -> llm::InferenceParameters {
+        let default_params = llm::InferenceParameters::default();
+
+        llm::InferenceParameters {
+            sampler: default_params.sampler,
+        }
+    }
+
+    fn inference_session_config(&self) -> llm::InferenceSessionConfig {
+        let default_params = llm::InferenceSessionConfig::default();
+
+        llm::InferenceSessionConfig {
+            memory_k_type: default_params.memory_k_type,
+            memory_v_type: default_params.memory_v_type,
+            n_batch: default_params.n_batch,
+            n_threads: num_cpus::get_physical(),
+        }
     }
 }
 
