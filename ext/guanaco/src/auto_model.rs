@@ -12,7 +12,7 @@ use magnus::{class, function, method, Module, Object, RModule};
    println!("{}", output);
 */
 
-#[magnus::wrap(class = "Camel::AutoModel", free_immediately, size)]
+#[magnus::wrap(class = "Guanaco::AutoModel", free_immediately, size)]
 pub struct AutoModel {
     pub model: Box<dyn Model>,
 }

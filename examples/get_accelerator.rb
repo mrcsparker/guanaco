@@ -1,4 +1,4 @@
-require 'guannaco'
+require 'guanaco'
 
 accelerator = Guanaco::get_accelerator()
-print accelerator
+puts accelerator
